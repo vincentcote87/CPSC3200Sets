@@ -1,7 +1,5 @@
 // Problem 305 - Joseph
 // Vincent Cote - CPSC 3200
-
-//TO SLOW :(
 #include <iostream>
 
 bool isValid(const int m, const int k) {
@@ -17,17 +15,21 @@ bool isValid(const int m, const int k) {
     return true;
 }
 
-int main(void) {
+int main (void) {
+    int ans[14];
     int k;
-    int m;
+    // pre-calculate all possible values
+    for (int k = 1; k < 14; ++k) {
+        int m = k;
+        while (!isValid(m, k))
+            m++;
+        ans[k] = m;
+    }
+
     while (true) {
         std::cin>>k;
         if (k == 0)
             return 0;
-        m = k;
-        while (!isValid(m, k))
-            m++;
-        std::cout<<m<<std::endl;
+        std::cout<<ans[k]<<std::endl;
     }
-
 }
