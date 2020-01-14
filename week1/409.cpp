@@ -8,23 +8,21 @@
 int main(void) {
     int numOfWords;
     int numOfExcuses;
-    int count = 0;
-    int worst = 0;
     int index = 0;
     std::string temp;
-    std::string worstExcuse;
     std::string currentExcuse;
-    std::vector<std::string> words;
+
 
     while (true) {
         index++;
-        count = -1;
-        worst = -1;
-        worstExcuse = "";
-        words.clear();
+        int count = -1;
+        int worst = -1;
+        std::string worstExcuse = "";
+        std::vector<std::string> words;
         std::cin>>numOfWords>>numOfExcuses;
         if (std::cin.eof())
           break;
+        // Fill vector with search words
         for (int i = 0; i < numOfWords; i++) {
             std::cin>>temp;
             words.push_back(temp);
