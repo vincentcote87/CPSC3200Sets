@@ -1,16 +1,27 @@
 // Problem 10189 - Minesweeper
 // Vincent Cote - CPSC 3200
+// Approach - Store the field in a string, append '.' around the field to not require
+// boundry checking. For each position in a string that corresponds to an actual field
+// input check how many mines are around it. For each mind found in the 8 surrounding
+// positions increment the total by 1.
+
+// Presentation error - Giving an extra line at the end of the program
 #include <iostream>
 
-int getCount(std::string str, int i) {
+int getCount(std::string str, int i, int n) {
   int count = 0;
-
+  int positions[] = {-1, 1, -n-1, -n-2, -n-3, n+1, n+2, n+3};
+  for (int j = 0; j < 8; j++) {
+    if (str[i + positions[j]] == '*')
+      count++;
+  }
   return count;
 }
 
 int main(void) {
-    int n, m;
+    int n, m, num = 0;
     while (std::cin>>m>>n && n != 0 && m != 0) {
+      num++;
       std::cin.ignore();
       std::string temp;
       std::string dummyRow(n + 2, '.');
@@ -21,46 +32,19 @@ int main(void) {
       }
       grid += dummyRow;
 
+      std::cout<<"Field #" + std::to_string(num) + ":"<<std::endl;
       for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
           int index = i * (n+2) + j;
           if (grid[index] == '.') {
-            std::cout<<getCount(grid, index);
+            std::cout<<getCount(grid, index, n);
           } else {
-            std::cout<<grid[index];
+            std::cout<<grid[index]; // Output mines
           }
         }
         std::cout<<std::endl;
       }
-
-
-
-      std::cout<<grid<<std::endl;
-
-
-
-      // std::string row1(n + 2, '.');
-
-      // std::string row2 = "", row3 = "";
-      // std::getline(std::cin, row2);
-      // std::getline(std::cin, row3);
-      // row2 = "." + row2 + ".";
-      // row3 = "." + row3 + ".";
-      // for (int i = 1; i < row2.length() - 1; i++) {
-      //   if (row2[i] == '.') {
-      //     for ( int j = 0; j < 3; j++) {
-
-      //     }
-      //   } else {
-      //     std::cout<<row2[i];
-      //   }
-      // }
-
-
-
-      // std::cout<<row1<<std::endl;
-      // std::cout<<row2<<std::endl;
-      // std::cout<<row3<<std::endl;
+      std::cout<<std::endl;
     }
   return 0;
 }
