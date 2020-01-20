@@ -42,6 +42,9 @@
     "iterator": "cpp",
     "memory_resource": "cpp",
     "random": "cpp",
-    "string": "cpp"
+    "string": "cpp",
+    "ctime": "cpp",
+    "map": "cpp",
+    "iomanip": "cpp"
   }
 }
