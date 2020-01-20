@@ -208,6 +208,23 @@ ostream& operator<< (ostream &os, const Date &d) {
   return os;
 }
 
+struct TableRow {
+  std::string sign;
+  Date start;
+  Date end;
+
+  TableRow(std::string s, Date st, Date e) {
+    sign = s;
+    start = st;
+    end = e;
+  }
+};
+
+TableRow Table[12] = {
+  {TableRow("aquarius", Date(1900, 01, 21), Date(1900, 02, 19))},
+  
+};
+
 std::string getSign(Date d) {
 	if ((d.mm == 1 && d.dd >= 21) || (d.mm == 2 && d.dd <= 19)) return "aquarius";
 	if ((d.mm == 2 && d.dd >= 20) || (d.mm == 3 && d.dd <= 20)) return "pisces";
