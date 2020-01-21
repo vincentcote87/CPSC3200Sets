@@ -3,7 +3,8 @@
 // Approach - Using given library for date manipulation. Use string manipulation to initialize the Date
 // once the date is in memory use Date.addDay() to add 40 weeks (280 days). To get sign I checked date ranges
 // and returned the proper sign. I also changed the overloaded << to match the date format requested by the question
-// **My Code starts on line 211 / main at line 226**
+// and the comparasons to ignore year
+// **My Code starts on line 213 / main at line 263**
 
 // Date class
 //
@@ -66,13 +67,14 @@ struct Date {
   // comparison operators
   bool operator==(const Date &d) const
   {
-    return dd == d.dd && mm == d.mm && yyyy == d.yyyy;
+    return dd == d.dd && mm == d.mm;
   }
 
   bool operator<(const Date &d) const
   {
-    return yyyy < d.yyyy || (yyyy == d.yyyy && mm < d.mm) ||
-      (yyyy == d.yyyy && mm == d.mm && dd < d.dd);
+    // return yyyy < d.yyyy || (yyyy == d.yyyy && mm < d.mm) ||
+    //   (yyyy == d.yyyy && mm == d.mm && dd < d.dd);
+    return mm < d.mm || (mm == d.mm && dd < d.dd);
   }
 
   // Returns true if yr is a leap year
@@ -220,24 +222,42 @@ struct TableRow {
   }
 };
 
-TableRow Table[12] = {
-  {TableRow("aquarius", Date(1900, 01, 21), Date(1900, 02, 19))},
-  
-};
+TableRow aquarius("aquarius", Date(1900, 1, 21), Date(1900, 2, 19));
+TableRow pisces("pisces", Date(1900, 2, 20), Date(1900, 3, 20));
+TableRow aries("aries", Date(1900, 3, 21), Date(1900, 4, 20));
+TableRow taurus("taurus", Date(1900, 4, 21), Date(1900, 5, 21));
+TableRow gemini("gemini", Date(1900, 5, 22), Date(1900, 6, 21));
+TableRow cancer("cancer", Date(1900, 6, 22), Date(1900, 7, 22));
+TableRow leo("leo", Date(1900, 7, 23), Date(1900, 8, 21));
+TableRow virgo("virgo", Date(1900, 8, 22), Date(1900, 9, 23));
+TableRow libra("libra", Date(1900, 9, 24), Date(1900, 10, 23));
+TableRow scorpio("scorpio", Date(1900, 10, 24), Date(1900, 11, 22));
+TableRow sagittarius("sagittarius", Date(1900, 11, 23), Date(1900, 12, 22));
+TableRow capricorn("capricorn", Date(1900, 12, 23), Date(1900, 12, 31));
+TableRow capricorn2("capricorn", Date(1900, 1, 1), Date(1900, 1, 20));
+
+TableRow Table[13] = {
+  aquarius,
+  pisces,
+  aries,
+  taurus,
+  gemini,
+  cancer,
+  leo,
+  virgo,
+  libra,
+  scorpio,
+  sagittarius,
+  capricorn,
+  capricorn2
+  };
 
 std::string getSign(Date d) {
-	if ((d.mm == 1 && d.dd >= 21) || (d.mm == 2 && d.dd <= 19)) return "aquarius";
-	if ((d.mm == 2 && d.dd >= 20) || (d.mm == 3 && d.dd <= 20)) return "pisces";
-	if ((d.mm == 3 && d.dd >= 21) || (d.mm == 4 && d.dd <= 20)) return "aries";
-	if ((d.mm == 4 && d.dd >= 21) || (d.mm == 5 && d.dd <= 21)) return "taurus";
-	if ((d.mm == 5 && d.dd >= 22) || (d.mm == 6 && d.dd <= 21)) return "gemini";
-	if ((d.mm == 6 && d.dd >= 22) || (d.mm == 7 && d.dd <= 22)) return "cancer";
-	if ((d.mm == 7 && d.dd >= 23) || (d.mm == 8 && d.dd <= 21)) return "leo";
-	if ((d.mm == 8 && d.dd >= 22) || (d.mm == 9 && d.dd <= 23)) return "virgo";
-	if ((d.mm == 9 && d.dd >= 24) || (d.mm == 10 && d.dd <= 23)) return "libra";
-	if ((d.mm == 10 && d.dd >= 24) || (d.mm == 11 && d.dd <= 22)) return "scorpio";
-	if ((d.mm == 11 && d.dd >= 23) || (d.mm == 12 && d.dd <= 22)) return "sagittarius";
-	if ((d.mm == 12 && d.dd >= 23) || (d.mm == 01 && d.dd <= 20)) return "capricorn";
+  for (int i = 0; i < 13; i++) {
+    if ((Table[i].start == d || Table[i].end == d) || (Table[i].start < d && d < Table[i].end))
+      return Table[i].sign;
+  }
+  return "No sign";
 }
 
 int main(void) {
