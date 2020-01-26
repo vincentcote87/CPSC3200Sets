@@ -1,6 +1,9 @@
-// 2 Priority queues
-// left has max on top, right has min on top
-
+// Problem 501 - Black Box
+// Vincent Cote - CPSC 3200
+// Approach - Using two priority queues to maintain the index position of i in the black box. One priority queue keeps the max
+// while the other keeps the min with all values in the min queue greater then the values in the max queue. Keeping track of
+// the size of the max priority queue is used to maintained the index position requested from the black box. For min queue I made a simple
+// struct to negate the push and top.
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -16,7 +19,20 @@ struct Min_priority_queue {
   size_t size() {
     return minQ.size();
   }
+  void pop() {
+    minQ.pop();
+  }
 };
+
+void pushToMinQueue(std::priority_queue<int> &from, Min_priority_queue &to) {
+  to.push(from.top());
+  from.pop();
+}
+
+void pushToMaxQueue(Min_priority_queue &from, std::priority_queue<int> &to) {
+  to.push(from.top());
+  from.pop();
+}
 
 int main(void) {
   int sets;
@@ -38,30 +54,33 @@ int main(void) {
       u.push_back(x);
     }
 
-    int i = 0;
+    int i = 1;
     std::priority_queue<int> maxQ;
     Min_priority_queue minQ;
     for (int j = 0; j < u.size(); j++) {
-      int size = maxQ.size() + minQ.size();
-      if (u[j] > size) {
-        
+      while (int totalSize = maxQ.size() + minQ.size() < u[j]) {
+        int temp = A[0];
+        A.erase(A.begin());
+        if (maxQ.empty()) {
+          maxQ.push(temp);
+        } else {
+          if (temp > maxQ.top())
+            minQ.push(temp);
+          else
+            maxQ.push(temp);
+        }
       }
+      while (maxQ.size() != i) {
+        if (maxQ.size() > i)
+          pushToMinQueue(maxQ, minQ);
+        else if (maxQ.size() < i)
+          pushToMaxQueue(minQ, maxQ);
+      }
+      i++;
+      std::cout<<maxQ.top()<<std::endl;
     }
+    if (sets != 0)
+      std::cout<<std::endl;
   }
-
-
-
-
-  // std::priority_queue<int> maxQ;
-  // Min_priority_queue minQ;
-  // int arr[11] = {33,55,23,87,45,7,12,-12,-44,64,2};
-  // for (int i = 0; i < 11; i++) {
-  //   maxQ.push(arr[i]);
-  //   minQ.push(arr[i]);
-  // }
-
-  // std::cout<<maxQ.top()<<std::endl;
-  // std::cout<<minQ.top()<<std::endl;
-  // std::cout<<minQ.size()<<std::endl;
   return 0;
 }
