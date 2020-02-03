@@ -1,6 +1,7 @@
 // Problem 11516 - WiFi
 // Vincent Cote - CPSC 3200
-// Approach -
+// Approach - The check functions returns a bool if it can cover all the houses based on a given distance
+// and number of access points.
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -20,11 +21,12 @@ bool check(std::vector<double> &arr, double dist, int n) {
 
 void printAnswer(double ans) {
 	double intPart, fractPart;
-	ans = floor((ans*2)+0.5)/2;
 	fractPart = modf(ans, &intPart);
-	std::cout<<ans;
-	if (fractPart == 0 || intPart == 0)
+	std::cout<<intPart;
+	if (fractPart < 0.5)
 		std::cout<<".0";
+	else
+		std::cout<<".5";
 	std::cout<<std::endl;
 }
 
@@ -57,8 +59,6 @@ int main(void) {
 					lo = mid;
 				}
 			}
-			// std::cout.precision(2);
-			// std::cout<<(floor((shortest*2)+0.5)/2)<<std::endl;
 			printAnswer(shortest);
 		}
 	}
