@@ -1,6 +1,7 @@
 // Problem 11195 - Another n-Queen problem
 // Vincent Cote - CPSC 3200
-// Approach -
+// Approach - Recursivly place queens row by row when possible, if it reaches the end of the board add to count
+
 #include <iostream>
 #include <algorithm>
 
@@ -16,11 +17,14 @@ void placeQueen(int row, int n) {
   else {
     for (int i = 0; i < n; i++) {
       if (grid[row][i] != '*') {
-        if (!(col[i] && xDia[row + i] && yDia[row - i + (n - 1)])) {
+        if (!col[i] && !xDia[row + i] && !yDia[row - i + (n - 1)]) {
           col[i] = true;
           xDia[row + i] = true;
           yDia[row - i + (n - 1)] = true;
           placeQueen(row + 1, n);
+          col[i] = false;
+          xDia[row + i] = false;
+          yDia[row - i + (n - 1)] = false;
         }
       }
     }
@@ -43,13 +47,12 @@ int main(void) {
       }
     }
     placeQueen(0, n);
-    std::cout<<count<<std::endl;
+    std::cout<<"Case "<<index<<": "<<count<<std::endl;
+    std::fill_n(col, 15, false);
+    std::fill_n(xDia, 30, false);
+    std::fill_n(yDia, 30, false);
+    count = 0;
 
   }
   return 0;
 }
-
-// recursive function to add queen
-// bool col[15] = {false}
-// diagonal from left to right - row + col
-// diagonal from right to left -
