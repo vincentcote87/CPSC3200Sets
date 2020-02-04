@@ -52,7 +52,6 @@ int main(void) {
     std::fill_n(xDia, 30, false);
     std::fill_n(yDia, 30, false);
     count = 0;
-
   }
   return 0;
 }
