@@ -1,6 +1,6 @@
 // Problem 11195 - Another n-Queen problem
 // Vincent Cote - CPSC 3200
-// Approach - Recursivly place queens row by row when possible, if it reaches the end of the board add to count
+// Approach - Recursively place queens row by row when possible, if it reaches the end of the board add to count
 
 #include <iostream>
 #include <algorithm>
