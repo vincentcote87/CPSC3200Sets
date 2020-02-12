@@ -17,6 +17,6 @@ int howMany(int sum, int denom) {
 }
 
 int main(void) {
-
+  
   return 0;
 }
