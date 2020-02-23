@@ -6,14 +6,20 @@
 struct sumStruct {
   int sum;
   int dir;
-}
+  sumStruct(int s, int d) {
+    sum = s;
+    dir = d;
+  }
+};
 
 int getMin(const int x[3]) {
   int smallest = x[0];
   int index = 0;
   for (int i = 0; i < 3; i++) {
-    if (x[i] <= smallest)
+    if (x[i] <= smallest) {
+      smallest = x[i];
       index = i;
+    }
   }
   return index;
 }
@@ -24,7 +30,7 @@ int main(void) {
     std::cin>>m>>n;
     if (std::cin.eof())
       break;
-    std::vector<std::vector<int>> matrix(m, std::vector<int>(n, -1));
+    std::vector<std::vector<int> > matrix(m, std::vector<int>(n, -1));
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
         int temp;
@@ -32,34 +38,40 @@ int main(void) {
         matrix[i][j] = temp;
       }
     }
-    std::vector<std::vector<sumStruct>> sumMatrix;
-    // std::vector<int> path;
-    // int total = INT16_MAX;
-    // for (int i = m - 1; i >= 0; i--) {
-    //   std::vector<int> tmpPath;
-    //   tmpPath.push_back(i);
-    //   int tmpTotal = matrix[i][n-1];
-    //   for (int col = n - 1; col > 0; col--) {
-    //     int row = tmpPath.back();
-    //     int vals[3] = {matrix[((row -1) >= 0 ? row - 1 : m - 1)][col - 1], matrix[row][col - 1], matrix[(row + 1) % m][col - 1]};
-    //     int minIndex = getMin(vals);
-    //     tmpTotal += vals[minIndex];
-    //     if (minIndex == 2)
-    //       tmpPath.push_back((row + 1) % m);
-    //     else if (minIndex == 1)
-    //       tmpPath.push_back(row);
-    //     else
-    //       tmpPath.push_back((row -1) >= 0 ? row - 1 : m - 1);
-    //   }
-    //   if (tmpTotal <= total) {
-    //     total = tmpTotal;
-    //     path = tmpPath;
-    //   }
-    // }
-    // for (int i = path.size() - 1; i >= 0; i--) {
-    //   std::cout<<path[i] + 1<<" ";
-    // }
-    // std::cout<<std::endl<<total<<std::endl;
+    sumStruct tmpSum(-1, -2);
+    std::vector<std::vector<sumStruct> > sumMatrix(m, std::vector<sumStruct>(n, tmpSum));
+    for (int i = 0; i < m; i++) {
+      sumStruct tmpSum(matrix[i][n-1], -2);
+      sumMatrix[i][n-1] = tmpSum;
+    }
+
+    for(int col = n - 2; col >= 0; col--) {
+      for (int row = m - 1; row >= 0; row--) {
+        int rows[3] = {(row + 1) % m, (row - 1) >= 0 ? row - 1 : m - 1, row};
+        int val[3] = {matrix[rows[0]][col + 1], matrix[rows[1]][col + 1], matrix[rows[2]][col + 1]};
+        int minIndex = getMin(val);
+        sumMatrix[row][col].sum = matrix[row][col] + sumMatrix[rows[minIndex]][col + 1].sum;
+        sumMatrix[row][col].dir = minIndex - 1;
+      }
+    }
+
+    int shortest = INT16_MAX;
+    int index = 0;
+    for (int i = 0; i < m; i++) {
+      if (sumMatrix[i][0].sum < shortest) {
+        shortest = sumMatrix[i][0].sum;
+        index = i;
+      }
+    }
+    int direction = index;
+    for (int i = 0; i < n; i++) {
+      std::cout<<direction + 1;
+      if (i != n - 1)
+        std::cout<<" ";
+      int temp = direction + sumMatrix[direction][i].dir;
+      direction = temp >= 0 ? temp % m : m - 1;
+    }
+    std::cout<<std::endl<<sumMatrix[index][0].sum<<std::endl;
   }
   return 0;
 }
