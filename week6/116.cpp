@@ -47,7 +47,7 @@ int main(void) {
 
     for(int col = n - 2; col >= 0; col--) {
       for (int row = m - 1; row >= 0; row--) {
-        int rows[3] = {(row + 1) % m, (row - 1) >= 0 ? row - 1 : m - 1, row};
+        int rows[3] = {(row - 1) >= 0 ? row - 1 : m - 1, row, (row + 1) % m};
         int val[3] = {matrix[rows[0]][col + 1], matrix[rows[1]][col + 1], matrix[rows[2]][col + 1]};
         int minIndex = getMin(val);
         sumMatrix[row][col].sum = matrix[row][col] + sumMatrix[rows[minIndex]][col + 1].sum;
