@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 struct sumStruct {
   int sum;
@@ -47,13 +48,54 @@ int main(void) {
 
     for(int col = n - 2; col >= 0; col--) {
       for (int row = m - 1; row >= 0; row--) {
-        int rows[3] = {(row - 1) >= 0 ? row - 1 : m - 1, row, (row + 1) % m};
-        int val[3] = {matrix[rows[0]][col + 1], matrix[rows[1]][col + 1], matrix[rows[2]][col + 1]};
-        int minIndex = getMin(val);
-        sumMatrix[row][col].sum = matrix[row][col] + sumMatrix[rows[minIndex]][col + 1].sum;
-        sumMatrix[row][col].dir = minIndex - 1;
+        // int rows[3] = {(row - 1) >= 0 ? row - 1 : m - 1, row, (row + 1) % m};
+        // int val[3] = {matrix[rows[0]][col + 1], matrix[rows[1]][col + 1], matrix[rows[2]][col + 1]};
+        // int minIndex = getMin(val);
+
+        int minVal = std::min(sumMatrix[(row + m - 1) % m][col + 1].sum, std::min(sumMatrix[row][col + 1].sum, sumMatrix[(row + 1) % m][col + 1].sum));
+        sumMatrix[row][col].sum = matrix[row][col] + minVal;
+        for (int k = 0; k < 3; k++) {
+          int x[3] = {-1, 0, 1};
+          int smallest = INT16_MAX;
+          if (sumMatrix[(row + m - 1) % m][col + 1].sum == minVal) {
+            if ((row + m - 1) % m < smallest) {
+              smallest = (row + m - 1) % m;
+              sumMatrix[row][col].dir = x[0];
+
+            }
+          }
+          if (sumMatrix[row][col + 1].sum == minVal) {
+            if (row < smallest) {
+              smallest = row;
+              sumMatrix[row][col].dir = x[1];
+            }
+          }
+          if (sumMatrix[(row + 1) % m][col + 1].sum == minVal) {
+            if ((row + 1) % m < smallest) {
+              smallest = (row + 1) % m;
+              sumMatrix[row][col].dir = x[2];
+            }
+          }
+        }
+        // sumMatrix[row][col].dir = minIndex - 1;
       }
     }
+
+    // for (int i = 0; i < m; i++) {
+    //   std::cout<<std::endl;
+    //   for (int j = 0; j < n; j++) {
+    //     std::cout<<sumMatrix[i][j].sum<<" ";
+    //   }
+    // }
+    // std::cout<<std::endl;
+
+    // for (int i = 0; i < m; i++) {
+    //   std::cout<<std::endl;
+    //   for (int j = 0; j < n; j++) {
+    //     std::cout<<sumMatrix[i][j].dir<<" ";
+    //   }
+    // }
+    // std::cout<<std::endl;
 
     int shortest = INT16_MAX;
     int index = 0;
