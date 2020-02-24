@@ -1,5 +1,9 @@
-// start from last col and check shortest path for each row, repeat, keep track of direction
-
+// Problem 116 - Unidirectional TSP
+// Vincent Cote - CPSC 3200
+// Approach - Build a matrix with the same size of the input, starting from the bottom right add up
+// the min of the 3 possible positions, keep this running sum in the new matrix. Once the minumum
+// has been found check which direction it came from, if they are equal keep the smallest row index.
+// keep track of direction with -1, 0, 1 to identify which row it came from.
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -12,18 +16,6 @@ struct sumStruct {
     dir = d;
   }
 };
-
-int getMin(const int x[3]) {
-  int smallest = x[0];
-  int index = 0;
-  for (int i = 0; i < 3; i++) {
-    if (x[i] <= smallest) {
-      smallest = x[i];
-      index = i;
-    }
-  }
-  return index;
-}
 
 int main(void) {
   while (true) {
@@ -48,55 +40,36 @@ int main(void) {
 
     for(int col = n - 2; col >= 0; col--) {
       for (int row = m - 1; row >= 0; row--) {
-        // int rows[3] = {(row - 1) >= 0 ? row - 1 : m - 1, row, (row + 1) % m};
-        // int val[3] = {matrix[rows[0]][col + 1], matrix[rows[1]][col + 1], matrix[rows[2]][col + 1]};
-        // int minIndex = getMin(val);
-
-        int minVal = std::min(sumMatrix[(row + m - 1) % m][col + 1].sum, std::min(sumMatrix[row][col + 1].sum, sumMatrix[(row + 1) % m][col + 1].sum));
+        int pos[3] = {(row + m - 1) % m, row, (row + 1) % m};
+        int minVal = std::min(sumMatrix[pos[0]][col + 1].sum, std::min(sumMatrix[pos[1]][col + 1].sum, sumMatrix[pos[2]][col + 1].sum));
         sumMatrix[row][col].sum = matrix[row][col] + minVal;
         for (int k = 0; k < 3; k++) {
           int x[3] = {-1, 0, 1};
           int smallest = INT16_MAX;
-          if (sumMatrix[(row + m - 1) % m][col + 1].sum == minVal) {
-            if ((row + m - 1) % m < smallest) {
-              smallest = (row + m - 1) % m;
+          if (sumMatrix[pos[0] % m][col + 1].sum == minVal) {
+            if (pos[0] < smallest) {
+              smallest = pos[0];
               sumMatrix[row][col].dir = x[0];
 
             }
           }
-          if (sumMatrix[row][col + 1].sum == minVal) {
-            if (row < smallest) {
-              smallest = row;
+          if (sumMatrix[pos[1]][col + 1].sum == minVal) {
+            if (pos[1] < smallest) {
+              smallest = pos[1];
               sumMatrix[row][col].dir = x[1];
             }
           }
-          if (sumMatrix[(row + 1) % m][col + 1].sum == minVal) {
-            if ((row + 1) % m < smallest) {
-              smallest = (row + 1) % m;
+          if (sumMatrix[pos[2]][col + 1].sum == minVal) {
+            if (pos[2] < smallest) {
+              smallest = pos[2];
               sumMatrix[row][col].dir = x[2];
             }
           }
         }
-        // sumMatrix[row][col].dir = minIndex - 1;
       }
     }
 
-    // for (int i = 0; i < m; i++) {
-    //   std::cout<<std::endl;
-    //   for (int j = 0; j < n; j++) {
-    //     std::cout<<sumMatrix[i][j].sum<<" ";
-    //   }
-    // }
-    // std::cout<<std::endl;
-
-    // for (int i = 0; i < m; i++) {
-    //   std::cout<<std::endl;
-    //   for (int j = 0; j < n; j++) {
-    //     std::cout<<sumMatrix[i][j].dir<<" ";
-    //   }
-    // }
-    // std::cout<<std::endl;
-
+    // Get row with smallest element in position 0
     int shortest = INT16_MAX;
     int index = 0;
     for (int i = 0; i < m; i++) {
