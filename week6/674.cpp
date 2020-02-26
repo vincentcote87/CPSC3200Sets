@@ -1,22 +1,28 @@
-// recursion, going through all the coin types
-// f(sum, n) n = # of denomination, sum = the number of ways to solve using n
-// denom[] = {1, 5, 10, 25, 50}
-
-// sum of { f(sum - k, n - 1)  int k = sum/denom[n-1]}
-// base case f(?, 1) = 1 if ? >= 0
-
+// Problem 674 - Coin Change
+// Vincent Cote - CPSC 3200
+// Approach - Since the total number of coins we need to consider is small I start by building
+// a table with all the values for how many ways each sum can be calculated then I access
+// this value from the table. Since the table is initialized with 1 for the first element and
+// 0 for the rest, when i = 0 will fill the table with 1 (meaning with coins of 1 there is
+// 1 way to get the sum).
 #include <iostream>
 
 int denom[] = {1,5,10,25,50};
+long int table[7550] = {1};
 
-int howMany(int sum, int denom) {
-  if (denom <= 1)
-    return 1;
-  int k = sum/denom;
-  
+void fillTable() {
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 7500; j++) {
+      table[denom[i] + j] += table[j];
+    }
+  }
 }
 
 int main(void) {
-  
+  fillTable();
+  int sum;
+  while(std::cin>>sum) {
+    std::cout<<table[sum]<<std::endl;
+  }
   return 0;
 }
