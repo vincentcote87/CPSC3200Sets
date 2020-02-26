@@ -10,6 +10,7 @@ int main(void) {
   std::cin.ignore();
   while (sets--) {
     std::vector<int> missiles;
+    int temp;
     std::cin>>temp;
     missiles.push_back(temp);
   }
