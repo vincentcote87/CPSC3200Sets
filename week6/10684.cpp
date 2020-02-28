@@ -3,7 +3,6 @@
 // Approach - To find the longest streak run through the array one element at a time and
 // add its value to the running total, keep track of the highest total. If the running total
 // ever falls below 0 restart the running total at 0 and continue.
-
 #include <iostream>
 #include <vector>
 
