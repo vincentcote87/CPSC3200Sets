@@ -41,6 +41,13 @@
 #include <algorithm>
 using namespace std;
 
+int states = 0;
+
+struct minExp {
+   double roads = 0.0;
+   double rails = 0.0;
+};
+
 class UnionFind
 {
       struct UF { int p; int rank; };
@@ -107,20 +114,26 @@ class Edge {
 };
 
 
-double mst(int n, int m, Edge elist[], int index[], int& size)
+minExp mst(int n, int m, Edge elist[], int index[], int& size, int r)
 {
   UnionFind uf(n);
 
   sort(elist, elist+m);
 
-  double w = 0.0;
+  minExp w;
   size = 0;
   for (int i = 0; i < m && size < n-1; i++) {
     int c1 = uf.find(elist[i].v1);
     int c2 = uf.find(elist[i].v2);
     if (c1 != c2) {
       index[size++] = i;
-      w += elist[i].w;
+      double dist = sqrt(elist[i].w);
+      if (dist >= r) {
+         w.rails += dist;
+         states++;
+      }
+      else
+         w.roads += dist;
       uf.merge(c1, c2);
     }
   }
@@ -130,23 +143,36 @@ double mst(int n, int m, Edge elist[], int index[], int& size)
 
 int main(void)
 {
-   cout << fixed << setprecision(2);
+   int sets;
+   int cases = 0;
+	std::cin>>sets;
+	int setNum = 1;
+	while(sets--) {
+      states = 1;
+		int n, r;
+		std::cin>>n>>r;
 
-   int n;
-   cin >> n;
-   double* x = new double[n];
-   double* y = new double[n];
-   int* index = new int[n];
+   // cout << fixed << setprecision(2);
 
-   for (int i = 0; i < n; i++)  cin >> x[i] >> y[i];
-   
-   Edge* elist = new Edge[n*n];
-   int k = 0;
-   for (int i = 0; i < n; i++) 
-      for (int j = i+1; j < n; j++) 
-	 elist[k++] = Edge(i,j,hypot(x[i]-x[j], y[i]-y[j]) );
-   
-   int t;  // number of edges in the mst
-   cout << mst(n, k, elist, index, t) << endl;
+      double* x = new double[n];
+      double* y = new double[n];
+      int* index = new int[n];
+
+      for (int i = 0; i < n; i++)  cin >> x[i] >> y[i];
+
+      Edge* elist = new Edge[n*n];
+      int k = 0;
+      for (int i = 0; i < n; i++)
+         for (int j = i+1; j < n; j++) {
+            double left = x[j] - x[i];
+            double right = y[j] - y[i];
+            double dist = (left*left) + (right*right);
+            elist[k++] = Edge(i,j, dist);
+         }
+
+      int t;  // number of edges in the mst
+      minExp result = mst(n, k, elist, index, t, r);
+      cout<<"Case #"<<++cases<<": "<<states<<" "<<floor(result.roads)<<" "<<floor(result.rails)<<endl;
+   }
    return 0;
 }
