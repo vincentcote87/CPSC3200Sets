@@ -1,12 +1,11 @@
 // Problem 10047 - The Monocycle
 // Vincent Cote - CPSC 3200
 // Approach - As discussed in class, do bfs on all possible direction while keeping track
-// of colour and current position on the graph. I also added padding around the paramters
-// instead of checking boundaries based on m and n.
+// of colour and current position on the graph.
 #include <iostream>
 #include <queue>
 
-char graph[27][27];
+char graph[25][25];
 int distance[25][25][4][5];
 int dr[4] = {-1, 0, 1, 0};
 int dc[4] = {0, 1, 0, -1};
@@ -23,8 +22,8 @@ struct state {
 };
 
 void resetGraph() {
-    for (int i = 0; i < 27; i++)
-			for (int j = 0; j < 27; j++)
+    for (int i = 0; i < 25; i++)
+			for (int j = 0; j < 25; j++)
 				graph[i][j] = '#';
 }
 
@@ -48,8 +47,8 @@ int main(void) {
 		resetGraph();
 		resetDistance();
 		int sRow, sCol, tRow, tCol;
-		for (int i = 1; i <= m; i++) {
-			for (int j = 1; j <= n; j++) {
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
 				char tmp;
 				std::cin>>tmp;
 				graph[i][j] = tmp;
@@ -63,7 +62,6 @@ int main(void) {
 				}
 			}
 		}
-
 		state src(sRow, sCol, 0, 0);
 
 		std::queue<state> q;
@@ -78,9 +76,9 @@ int main(void) {
 				break;
 			}
 			state next(cur.r + dr[cur.dir], cur.c + dc[cur.dir], cur.dir, cur.color);
-			if (graph[next.r][next.c] != '#') {
+			if (next.r >= 0 && next.r < m && next.c >= 0 && next.c < n) {
 				next.color = (next.color + 1) % 5;
-				if (distance[next.r][next.c][next.dir][next.color] == -1) {
+				if (distance[next.r][next.c][next.dir][next.color] == -1 && graph[next.r][next.c] != '#') {
 					distance[next.r][next.c][next.dir][next.color] = distance[cur.r][cur.c][cur.dir][cur.color] + 1;
 					q.push(next);
 				}
