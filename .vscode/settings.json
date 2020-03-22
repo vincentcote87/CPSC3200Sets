@@ -72,6 +72,22 @@
     "mutex": "cpp",
     "queue": "cpp",
     "ratio": "cpp",
-    "set": "cpp"
+    "set": "cpp",
+    "cfenv": "cpp",
+    "codecvt": "cpp",
+    "condition_variable": "cpp",
+    "csetjmp": "cpp",
+    "csignal": "cpp",
+    "forward_list": "cpp",
+    "list": "cpp",
+    "unordered_set": "cpp",
+    "future": "cpp",
+    "scoped_allocator": "cpp",
+    "shared_mutex": "cpp",
+    "thread": "cpp",
+    "regex": "cpp",
+    "typeindex": "cpp",
+    "valarray": "cpp",
+    "cuchar": "cpp"
   }
 }

@@ -11,6 +11,7 @@ int main(void) {
 		std::string party[1001];
 		std::string club[80000];
 		int lineIndex = 1;
+		int clubIndex = 3000;
 		while (true) {
 			std::string str;
 			std::getline(std::cin, str);
@@ -21,7 +22,8 @@ int main(void) {
 			lineIndex++;
 			std::string c;
 			while (iss>>c) {
-				std::cout<<c<<std::endl;
+				club[clubIndex] = c;
+				clubIndex++;
 			}
 
 		}
