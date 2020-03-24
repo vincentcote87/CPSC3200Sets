@@ -145,6 +145,18 @@ int network_flow(Graph &G, int s, int t)
   return flow;
 }
 
+std::string getKey(map<std::string,int> m, int i) {
+  map<std::string,int>::iterator it = m.begin();
+  while (it != m.end()) {
+    if (it -> second == i) {
+      std::string str = it -> first;
+      return str;
+    }
+    it++;
+  }
+  return NULL;
+}
+
 int main(void) {
 	int t;
 	std::cin>>t;
@@ -172,7 +184,7 @@ int main(void) {
 			iss>>name>>party;
       people[peopleIndex][0] = name;
       people[peopleIndex][1] = party;
-			nameMap[name] = nameMap.size() - 1;
+			nameMap[name] = nameMap.size();
 			if (partyMap.find(party) == partyMap.end()) {
         int n = partyMap.size();
 				partyMap[party] = n;
@@ -190,11 +202,20 @@ int main(void) {
 		}
 
     // std::map<std::string,int>::iterator it = clubMap.begin();
-    // std::cout<<clubMap["a"]<<std::endl;
+    // std::cout<<clubMap.size()<<std::endl;
     // while (it != clubMap.end()) {
-    //   std::cout<<it->first<<std::endl;
+    //   std::cout<<it->first<<" "<<it->second<<std::endl;
     //   it++;
     // }
+    // cout<<nameMap["a"]<<" "<<nameMap["b"]<<" "<<nameMap["c"]<<endl<<endl;
+
+    // cout<<"club size = "<<clubMap.size()<<endl;
+    // cout<<"name size = "<<nameMap.size()<<endl;
+    // cout<<"party size = "<<partyMap.size()<<endl;
+    // cout<<getKey(clubMap, 0)<<endl;
+    // cout<<getKey(clubMap, 1)<<endl;
+    // cout<<getKey(clubMap, 2)<<endl;
+
 
     int nodeCount = 2 + nameMap.size() + partyMap.size() + clubMap.size();
     // std::cout<<nodeCount<<std::endl;
@@ -203,29 +224,44 @@ int main(void) {
     int nameModifier = clubModifier + clubMap.size();
     int partyModifier = nameModifier + nameMap.size();
     for (int i = 0; i < clubMap.size(); i++) {
-      // std::cout<<i + clubModifier<<std::endl;
+      // std::cout<<"Club nodes = "<<i + clubModifier<<std::endl;
       G.add_edge(0, i + clubModifier, 1);
     }
     for (int i = 0; i < peopleIndex; i++) {
-      std::cout<<nameMap[people[i][0]] + nameModifier<<endl;
+      // std::cout<<"Name nodes = "<<nameMap[people[i][0]] + nameModifier<<endl;
+      // std::cout<<"Party nodes = "<<partyMap[people[i][1]] + partyModifier<<endl;
       G.add_edge(nameMap[people[i][0]] + nameModifier, partyMap[people[i][1]] + partyModifier, 1);
+      // std::cout<<clubMap.size()<<std::endl;
       for (int j = 2; j < 100; j++) {
-        G.add_edge(clubMap[people[i][j]] + clubModifier, nameMap[people[i][0]] + nameModifier, 1);
+        if (people[i][j] != "")
+          G.add_edge(clubMap[people[i][j]] + clubModifier, nameMap[people[i][0]] + nameModifier, 1);
       }
     }
-    int cap = (clubMap.size() - 2) / 2;
+
+    // clubMap.erase(clubMap.begin());
+    // std::map<std::string,int>::iterator it = clubMap.begin();
+    // std::cout<<clubMap.size()<<std::endl;
+    // while (it != clubMap.end()) {
+    //   std::cout<<it->first<<" "<<it->second<<std::endl;
+    //   it++;
+    // }
+
+
+    int cap = (clubMap.size() - 1) / 2;
     for (int i = 0; i < partyMap.size(); i++) {
       G.add_edge(i + partyModifier, 1, cap);
     }
     int flow = network_flow(G,0,1);
-    if (flow == clubMap.size() - 1) {
-      for (int u = 2; u < clubMap.size() + 1; u++) {
+    if (flow == clubMap.size()) {
+      for (int u = 2; u < clubMap.size() + 2; u++) {
         // std::cout<<"u = "<<u<<std::endl;
         for (auto e: G.nbr[u]) {
           if (e.flow > 0 && e.is_real) {
-            std::cout<<e.to<<std::endl;
+            // std::cout<<e.to<<" "<<e.to - nameModifier;
+            std::cout<<getKey(nameMap,e.to - nameModifier)<<" ";
           }
       }
+      std::cout<<getKey(clubMap, u - 2)<<std::endl;
       }
     } else {
       std::cout<<"Impossible."<<std::endl;
