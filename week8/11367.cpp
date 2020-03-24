@@ -14,3 +14,10 @@ int main(void) {
 		std::cin>>u>>v>>d;
 	}
 }
+
+
+
+dijkstra_sparse
+
+addEdge
+

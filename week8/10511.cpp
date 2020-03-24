@@ -31,3 +31,17 @@ int main(void) {
 	}
   return 0;
 }
+
+nameIndex map
+if (nameIndex.find(name) == nameIndex.end()) {
+	int n = nameIndex.size();
+	nameIndex[name] = n;
+}
+
+s = 0
+t = 1
+clubs = 2 (2 + i)
+ppl = 2 + clubs (2 + clubs + i)
+party = 2 + clubs + ppl
+
+capacity = (clubs - 1) / 2 int
