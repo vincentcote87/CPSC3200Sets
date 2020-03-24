@@ -1,3 +1,12 @@
+// Problem 10511 - Councilling
+// Vincent Cote - CPSC 3200
+// Approach - Using the provided library for network flow I built the graph using the
+// index schema discussed in class where s = 0, t = 1, clubs start at 2, names start at club
+// count + 2 and party start after the names. To keep track of each person I added them
+// to a 2D array with each entry having its first index used for the name, second for
+// party, and remaining 98 for clubs.
+
+
 /*
  * Network Flow
  *
